@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+# If script run by symlink, cd to it's real location
+if [ -L ${0} ]
+then
+    cd "$(dirname "$(readlink "$0")")"
+fi
+
+function generate_ssh_key() {
+    echo
+}
+
+function generate_password() {
+    echo
+}
+
+function run_ansible_playbook() {
+    ansible-playbook -i hosts playbook.yml --tags ${1} --private-key keys/id_rsa
+}
+
+function print_proxy_info() {
+    echo "$1 proxy server on"
+}
+
+function print_help() {
+    printf "usage: proxy [command]\n"
+    printf "commands:\n"
+    printf "\tsetup   - generate SSH key and user password\n"
+    printf "\trun     - run ansible playbook to isntall, config and start proxy server\n"
+    printf "\tisntall - run ansible playbook to instal proxy server\n"
+    printf "\tconfig  - run ansible playbook to config proxy server\n"
+    printf "\tstart   - run ansible playbook to start proxy server\n"
+    printf "\trestart - run ansible playbook to restart proxy server\n"
+    printf "\tstop    - run ansible playbook to stop proxy server\n"
+}
+
+case "$1" in
+"setup")
+    generate_ssh_key
+    generate_password
+    ;;
+"isntall" | "config" | "stop")
+    run_ansible_playbook
+    ;;
+"run" | "start" | "restart")
+    run_ansible_playbook
+    print_proxy_info
+    ;;
+*)
+    print_help
+    ;;
+esac

@@ -1,0 +1,5 @@
+- name: Stop proxy service
+  systemd:
+    state: stopped
+    daemon_reload: yes
+    name: danted

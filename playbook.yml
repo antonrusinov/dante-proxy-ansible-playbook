@@ -1,0 +1,13 @@
+- hosts: digitalocean
+  user: root
+  vars:
+    http_proxy_port: 8888
+    username: your_name
+    password: very_secret_password
+    hash_solt: very_secret_solt
+
+  roles:
+    - {name: isntall-dante, tags: [isntall, run]}
+    - {name: stop-dante, tags: [stop]}
+    - {name: configure-dante, tags: [config, run, restart]}
+    - {name: start-dante, tags: [start, run, restart]}

@@ -1,0 +1,10 @@
+- name: Remove Dante proxy server
+  apt:
+    name: dante-server
+    state: absent
+
+
+- name: Update cache and install Dante proxy server
+  apt:
+    name: dante-server
+    update_cache: yes

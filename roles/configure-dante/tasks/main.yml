@@ -1,0 +1,23 @@
+- name: Add group for proxy users
+  group:
+    name: proxy
+    state: present
+
+
+- name: Generate user password
+  shell: python -c 'import crypt; print crypt.crypt("123456789", "random_salt")'
+  register: genpass
+
+
+- name: Add user to proxy group
+  user:
+    name: anton
+    group: proxy
+    password: "{{ genpass.stdout }}"
+
+
+- name: Replace Dante proxy server config file
+  copy:
+    src: ../templates/sockd.conf
+    dest: /etc/danted.conf
+    mode: 0655
