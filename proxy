@@ -19,7 +19,7 @@ function generate_ssh_key() {
 function generate_password() {
     rm -rf config.yml
     printf \
-    "port: 8888\nuser: default\npassword: $(rand_str)\nsolt: $(rand_str)\n" > \
+    "port: 8888\nusername: default\npassword: $(rand_str)\nsalt: $(rand_str)\n" > \
     userdata/config.yml
 }
 
@@ -34,7 +34,7 @@ function run_ansible_playbook() {
 function print_help() {
     printf "usage: proxy [command]\n"
     printf "commands:\n"
-    printf "\tsetup   - generate SSH keys\n"
+    printf "\tsetup   - generate SSH keys and config file\n"
     printf "\tinfo    - print proxy settings\n"
     printf "\trun     - run ansible playbook to isntall, config and start proxy server\n"
     printf "\tinstall - run ansible playbook to instal proxy server\n"

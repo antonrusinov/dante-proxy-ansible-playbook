@@ -1,17 +1,23 @@
+- name: Include vars of userdata/config.yml into the 'config' variable (2.2).
+  include_vars:
+    file: userdata/config.yml
+    name: config
+
+
+- name: Generate user password
+  shell: python -c 'import crypt; print crypt.crypt("{{ config.password }}", "{{ config.salt }}")'
+  register: genpass
+
+
 - name: Add group for proxy users
   group:
     name: proxy
     state: present
 
 
-- name: Generate user password
-  shell: python -c 'import crypt; print crypt.crypt("123456789", "random_salt")'
-  register: genpass
-
-
 - name: Add user to proxy group
   user:
-    name: anton
+    name: "{{ config.username }}"
     group: proxy
     password: "{{ genpass.stdout }}"
 
