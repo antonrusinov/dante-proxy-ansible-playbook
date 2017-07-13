@@ -1,9 +1,9 @@
 - hosts: digitalocean
   user: root
   vars:
-    http_proxy_port: 8888
-    username: your_name
-    password: very_secret_password
+    port:      8888
+    username:  default
+    password:  very_secret_password
     hash_solt: very_secret_solt
 
   roles:

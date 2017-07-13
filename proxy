@@ -1,33 +1,33 @@
 #!/usr/bin/env bash
 
-# If script run by symlink, cd to it's real location
+
 if [ -L ${0} ]
 then
     cd "$(dirname "$(readlink "$0")")"
 fi
 
 function generate_ssh_key() {
-    echo
+    mkdir -p keys
+    ssh-keygen -t rsa -b 4096 -f keys/proxy_id_rsa -q -N ""
+    echo "public key:"
+    cat keys/proxy_id_rsa.pub
 }
 
-function generate_password() {
-    echo
+function print_proxy_info() {
+    cat playbook.yml | grep -e 'port' -e 'username' -e 'password' | sed -e 's/^[ \t]*//'
 }
 
 function run_ansible_playbook() {
     ansible-playbook -i hosts playbook.yml --tags ${1} --private-key keys/id_rsa
 }
 
-function print_proxy_info() {
-    echo "$1 proxy server on"
-}
-
 function print_help() {
     printf "usage: proxy [command]\n"
     printf "commands:\n"
-    printf "\tsetup   - generate SSH key and user password\n"
+    printf "\tsetup   - generate SSH keys\n"
+    printf "\tinfo    - print proxy settings\n"
     printf "\trun     - run ansible playbook to isntall, config and start proxy server\n"
-    printf "\tisntall - run ansible playbook to instal proxy server\n"
+    printf "\tinstall - run ansible playbook to instal proxy server\n"
     printf "\tconfig  - run ansible playbook to config proxy server\n"
     printf "\tstart   - run ansible playbook to start proxy server\n"
     printf "\trestart - run ansible playbook to restart proxy server\n"
@@ -37,7 +37,9 @@ function print_help() {
 case "$1" in
 "setup")
     generate_ssh_key
-    generate_password
+    ;;
+"info")
+    print_proxy_info
     ;;
 "isntall" | "config" | "stop")
     run_ansible_playbook
