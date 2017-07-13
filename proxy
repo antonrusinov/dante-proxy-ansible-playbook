@@ -13,6 +13,10 @@ function generate_ssh_key() {
     cat keys/proxy_id_rsa.pub
 }
 
+function generate_password() {
+    echo "TODO: write generate_password() function"
+}
+
 function print_proxy_info() {
     cat playbook.yml | grep -e 'port' -e 'username' -e 'password' | sed -e 's/^[ \t]*//'
 }
@@ -37,6 +41,7 @@ function print_help() {
 case "$1" in
 "setup")
     generate_ssh_key
+    generate_password
     ;;
 "info")
     print_proxy_info
