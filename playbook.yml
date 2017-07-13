@@ -3,8 +3,8 @@
   vars:
     port:      8888
     username:  default
-    password:  very_secret_password
-    hash_solt: very_secret_solt
+    password:  cd22b5ba
+    hash_solt: 2d81a9df
 
   roles:
     - {name: isntall-dante, tags: [isntall, run]}

@@ -14,7 +14,11 @@ function generate_ssh_key() {
 }
 
 function generate_password() {
-    echo "TODO: write generate_password() function"
+    sed \
+    -i '' \
+    -e "s/.*password.*/    password:  $(openssl rand -hex 4)/" \
+    -e "s/.*hash_solt.*/    hash_solt: $(openssl rand -hex 4)/" \
+    playbook.yml
 }
 
 function print_proxy_info() {
