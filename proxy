@@ -7,7 +7,7 @@ then
 fi
 
 function rand_str() {
-    printf "$(openssl rand -hex 4)"
+    printf "$(openssl rand -hex 8)"
 }
 
 function generate_ssh_key() {
@@ -17,7 +17,6 @@ function generate_ssh_key() {
 }
 
 function generate_password() {
-    rm -rf config.yml
     printf \
     "port: 8888\nusername: default\npassword: $(rand_str)\nsalt: $(rand_str)\n" > \
     userdata/config.yml
@@ -46,6 +45,7 @@ function print_help() {
 
 case "$1" in
 "setup")
+    rm -rf userdata
     mkdir userdata
     generate_ssh_key
     generate_password

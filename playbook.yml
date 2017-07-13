@@ -1,10 +1,5 @@
 - hosts: digitalocean
   user: root
-  vars:
-    port:      8888
-    username:  default
-    password:  cd22b5ba
-    hash_solt: 2d81a9df
 
   roles:
     - {name: isntall-dante, tags: [isntall, run]}
