@@ -6,23 +6,25 @@ then
     cd "$(dirname "$(readlink "$0")")"
 fi
 
+function rand_str() {
+    printf "$(openssl rand -hex 4)"
+}
+
 function generate_ssh_key() {
-    mkdir -p keys
-    ssh-keygen -t rsa -b 4096 -f keys/proxy_id_rsa -q -N ""
+    ssh-keygen -t rsa -b 4096 -f userdata/proxy_id_rsa -q -N ""
     echo "public key:"
-    cat keys/proxy_id_rsa.pub
+    cat userdata/proxy_id_rsa.pub
 }
 
 function generate_password() {
-    sed \
-    -i '' \
-    -e "s/.*password.*/    password:  $(openssl rand -hex 4)/" \
-    -e "s/.*hash_solt.*/    hash_solt: $(openssl rand -hex 4)/" \
-    playbook.yml
+    rm -rf config.yml
+    printf \
+    "port: 8888\nuser: default\npassword: $(rand_str)\nsolt: $(rand_str)\n" > \
+    userdata/config.yml
 }
 
 function print_proxy_info() {
-    cat playbook.yml | grep -e 'port' -e 'username' -e 'password' | sed -e 's/^[ \t]*//'
+    cat userdata/config.yml | grep -e 'port' -e 'username' -e 'password'
 }
 
 function run_ansible_playbook() {
@@ -44,6 +46,7 @@ function print_help() {
 
 case "$1" in
 "setup")
+    mkdir userdata
     generate_ssh_key
     generate_password
     ;;
