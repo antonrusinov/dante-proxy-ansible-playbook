@@ -1,0 +1,1 @@
+Ansible playbook for manage Dante proxy service.
