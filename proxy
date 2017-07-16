@@ -10,33 +10,27 @@ function rand_str() {
     printf "$(openssl rand -hex 8)"
 }
 
-function generate_ssh_key() {
-    ssh-keygen -t rsa -b 4096 -f userdata/proxy_id_rsa -q -N ""
-    echo "public key:"
-    cat userdata/proxy_id_rsa.pub
-}
-
-function generate_password() {
+function generate_user_config() {
     printf \
     "port: 8888\nusername: default\npassword: $(rand_str)\nsalt: $(rand_str)\n" > \
-    userdata/config.yml
+    config.yml
 }
 
 function print_proxy_info() {
-    cat userdata/config.yml | grep -e 'port' -e 'username' -e 'password'
+    cat config.yml | grep -e 'port' -e 'username' -e 'password'
 }
 
 function run_ansible_playbook() {
-    ansible-playbook -i hosts playbook.yml --tags ${1} --private-key keys/id_rsa
+    ansible-playbook -i hosts playbook.yml --tags "$1"
 }
 
 function print_help() {
     printf "usage: proxy [command]\n"
     printf "commands:\n"
-    printf "\tsetup   - generate SSH keys and config file\n"
+    printf "\tsetup   - generate user config file\n"
     printf "\tinfo    - print proxy settings\n"
     printf "\trun     - run ansible playbook to isntall, config and start proxy server\n"
-    printf "\tinstall - run ansible playbook to instal proxy server\n"
+    printf "\tinstall - run ansible playbook to install proxy server\n"
     printf "\tconfig  - run ansible playbook to config proxy server\n"
     printf "\tstart   - run ansible playbook to start proxy server\n"
     printf "\trestart - run ansible playbook to restart proxy server\n"
@@ -45,19 +39,16 @@ function print_help() {
 
 case "$1" in
 "setup")
-    rm -rf userdata
-    mkdir userdata
-    generate_ssh_key
-    generate_password
+    generate_user_config
     ;;
 "info")
     print_proxy_info
     ;;
-"isntall" | "config" | "stop")
-    run_ansible_playbook
+"install" | "config" | "stop")
+    run_ansible_playbook "$1"
     ;;
 "run" | "start" | "restart")
-    run_ansible_playbook
+    run_ansible_playbook "$1"
     print_proxy_info
     ;;
 *)

@@ -2,7 +2,7 @@
   user: root
 
   roles:
-    - {name: isntall-dante, tags: [isntall, run]}
+    - {name: install-dante, tags: [install, run]}
     - {name: stop-dante, tags: [stop]}
     - {name: configure-dante, tags: [config, run, restart]}
     - {name: start-dante, tags: [start, run, restart]}

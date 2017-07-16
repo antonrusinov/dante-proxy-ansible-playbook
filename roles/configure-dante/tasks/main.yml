@@ -1,6 +1,6 @@
-- name: Include vars of userdata/config.yml into the 'config' variable (2.2).
+- name: Include vars of config.yml into the 'config' variable (2.2).
   include_vars:
-    file: userdata/config.yml
+    file: config.yml
     name: config
 
 
@@ -23,7 +23,6 @@
 
 
 - name: Replace Dante proxy server config file
-  copy:
+  template:
     src: ../templates/sockd.conf
     dest: /etc/danted.conf
-    mode: 0655
